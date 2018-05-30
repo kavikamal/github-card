@@ -1,21 +1,62 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 
-class App extends Component {
-  render() {
+
+
+class AppComponent extends Component {
+  state = {
+    user: {} ,
+    active: false 
+ }
+
+  render () {
+    const children = <ChildComponent avatarUrl={this.state.user.avatar_url} 
+                                     user={this.state.user.name}
+                                     location={this.state.user.location} 
+                                     bio={this.state.user.bio}/>;
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <ParentComponent handleClick={this.handleClick}>
+        {children}
+      </ParentComponent>
     );
   }
+
+  handleClick = () => {
+    console.log('Text box value',document.getElementById("userId").value);
+    fetch("https://api.github.com/users/"+document.getElementById("userId").value)
+      .then((res) => { return res.json() })
+            .then((data) => { 
+                this.setState({user : data}) 
+                document.getElementById("children-pane").hidden=false;
+                console.log(this.state.user); 
+      });
+    }
 }
 
-export default App;
+const ParentComponent = props => (
+ 
+    <div className="mainDiv"> 
+     <br/>
+     <input type="text" id="userId"/>
+      <button onClick={props.handleClick}>Click</button>
+      <br/>
+      <br/>
+
+      <div id="children-pane" hidden>
+      {props.children}
+      </div>
+     </div>
+  
+);
+
+const ChildComponent = props => ( <div id="userInfo" className="user">
+          <img className="portrait" src={props.avatarUrl} alt={props.user}/> 
+            <h1>{props.user}</h1>
+            <p>{props.location}</p>
+            <p className="title">{props.bio}</p>
+          </div> 
+)
+
+export default AppComponent;
