@@ -7,14 +7,17 @@ import './App.css';
 class AppComponent extends Component {
   state = {
     user: {} ,
-    active: false 
+    active: true 
  }
 
   render () {
     const children = <ChildComponent avatarUrl={this.state.user.avatar_url} 
                                      user={this.state.user.name}
                                      location={this.state.user.location} 
-                                     bio={this.state.user.bio}/>;
+                                     bio={this.state.user.bio}
+                                     company={this.state.user.company}
+                                     toggleUser={this.toggleUser}
+                                     active={this.state.active} />;
 
     return (
       <ParentComponent handleClick={this.handleClick}>
@@ -33,6 +36,10 @@ class AppComponent extends Component {
                 console.log(this.state.user); 
       });
     }
+  toggleUser=()=>{
+      let isActive = this.state.active? false:true;
+      this.setState({active : isActive})
+    }   
 }
 
 const ParentComponent = props => (
@@ -40,10 +47,9 @@ const ParentComponent = props => (
     <div className="mainDiv"> 
      <br/>
      <input type="text" id="userId"/>
-      <button onClick={props.handleClick}>Click</button>
+      <button onClick={props.handleClick}>Find User</button>
       <br/>
       <br/>
-
       <div id="children-pane" hidden>
       {props.children}
       </div>
@@ -52,11 +58,17 @@ const ParentComponent = props => (
 );
 
 const ChildComponent = props => ( <div id="userInfo" className="user">
+          <button onClick={props.toggleUser}>Toggle User</button>
+          <br/>
+          <br/>
+          {props.active && <div >
           <img className="portrait" src={props.avatarUrl} alt={props.user}/> 
             <h1>{props.user}</h1>
             <p>{props.location}</p>
+            <p>{props.company}</p>
             <p className="title">{props.bio}</p>
+          </div>  
+          }
           </div> 
 )
-
 export default AppComponent;

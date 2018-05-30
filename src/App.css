@@ -38,16 +38,16 @@ button{
 
 .user {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 300px;
+  max-width: 200px;
   margin: auto;
   padding:50px 50px  50px 50px;
   text-align: center;
-  background-color: darkgrey;
+  background-color: greenyellow;
 }
 
 .portrait {
   height: 200px;
-  width: 150px;
+  width: 200px;
 }
 
 .title {
